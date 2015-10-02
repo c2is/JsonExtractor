@@ -1,0 +1,32 @@
+{
+    "name": "c2is/json-extractor",
+    "type": "library",
+    "description": "Library for extracting JSON from a string or DomDocument object",
+    "keywords": ["json", "parser", "extract"],
+    "homepage": "http://github.com/",
+    "license": "GPL-3.0+",
+    "authors": [
+        {
+            "name": "John Daligault",
+            "email": "j.daligault@c2is.fr"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.2",
+        "peekmo/jsonpath": "dev-master"
+    },
+    "suggest": {
+        "jms/serializer": "Useful to subsequently parse the extracted JSON."
+    },
+    "minimum-stability": "stable",
+    "autoload": {
+        "psr-0": {
+            "C2iS\\Component\\Json": "src/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.1-dev"
+        }
+    }
+}

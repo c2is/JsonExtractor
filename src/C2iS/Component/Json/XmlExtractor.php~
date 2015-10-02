@@ -1,0 +1,58 @@
+<?php
+
+namespace C2iS\Component\Json;
+
+/**
+ * Class JsonExtractor
+ * @package C2iS\Component\Json
+ */
+class JsonExtractor
+{
+    /**
+     * Extracts a portion of the XML passed as the first argument, defined by the XPath passed as the second argument..
+     * Accepts both DomDocument object and string. If a string is passed as the first argument, it must contain valid XML.
+     * Returns a XML string.
+     *
+     * If a DomDocument was passed as the first argument, this function removes the nodes corresponding to the given XPath.
+     * If a string was passed, this function removes the portion corresponding to the given XPath.
+     *
+     * In both cases, the string returned is equal to the removed portion.
+     *
+     * @param string|\DOMDocument $input The DomDocument or string input, passed by reference
+     * @param string $xpath The XPath to extract
+     * @param array $namespaces If your XML contains namespaces, you must pass them to this function to allow XPath to work. Associative array $namespacePrefix => $namespaceName
+     * @return string The XML extracted from $input
+     */
+    public static function extract(&$input, $xpath, $namespaces = array())
+    {
+        if ($input instanceof \DOMDocument) {
+            $dom = $input;
+        } else {
+            $dom = new \DOMDocument();
+            set_error_handler(function() { /* ignore warning errors from DomDocument::loadXML*/ }, E_WARNING);
+            $dom->loadXML($input);
+            restore_error_handler();
+        }
+
+        $domXpath = new \DOMXPath($dom);
+
+        foreach ($namespaces as $prefix => $namespace) {
+            $domXpath->registerNamespace($prefix, $namespace);
+        }
+
+        $nodes    = $domXpath->query($xpath);
+        $content  = '';
+
+        /** @var \DOMNode $node */
+        foreach ($nodes as $node) {
+            $content .= $dom->saveXML($node);
+            $node->parentNode->removeChild($node);
+        }
+
+        if (is_string($input)) {
+            $input = $dom->saveXML($dom->documentElement);
+        }
+
+        return $content;
+    }
+}
