@@ -13,7 +13,7 @@
     ],
     "require": {
         "php": ">=5.3.2",
-        "peekmo/jsonpath": "dev-master"
+        "peekmo/jsonpath": "~2.0@dev"
     },
     "suggest": {
         "jms/serializer": "Useful to subsequently parse the extracted JSON."
